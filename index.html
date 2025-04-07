@@ -17,6 +17,7 @@
       padding: 30px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      display: none;
     }
     .question {
       margin-bottom: 20px;
@@ -45,7 +46,7 @@
       pointer-events: none;
       opacity: 0.7;
     }
-    .submit-btn {
+    .submit-btn, .start-btn {
       margin-top: 20px;
       padding: 12px 25px;
       font-size: 16px;
@@ -60,14 +61,31 @@
       font-weight: bold;
       margin-top: 20px;
     }
+    #startScreen {
+      max-width: 500px;
+      margin: 100px auto;
+      text-align: center;
+    }
+    #leaderboard {
+      margin-top: 30px;
+    }
   </style>
 </head>
 <body>
-  <div class="quiz-container">
+  <div id="startScreen">
+    <h1>Welcome to the AACI Clinical Governance Quiz</h1>
+    <p>Enter your name to start:</p>
+    <input type="text" id="username" placeholder="Your Name" />
+    <br><br>
+    <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
+  </div>
+
+  <div class="quiz-container" id="quizContainer">
     <h1>AACI Clinical Governance Quiz</h1>
     <form id="quizForm"></form>
     <button class="submit-btn" onclick="submitQuiz()">Submit</button>
     <div class="score" id="scoreDisplay"></div>
+    <div id="leaderboard"></div>
   </div>
 
   <script>
@@ -89,38 +107,49 @@
       { question: "15. Clinical governance promotes:", options: ["Fear among staff", "Transparency and improvement", "Strict discipline", "Short-term goals"], answer: 1 }
     ];
 
-    const quizForm = document.getElementById('quizForm');
+    let username = "";
     let answers = Array(quizData.length).fill(null);
     let locked = Array(quizData.length).fill(false);
 
-    quizData.forEach((q, index) => {
-      const div = document.createElement('div');
-      div.classList.add('question');
-      const qText = document.createElement('p');
-      qText.innerHTML = `<strong>${q.question}</strong>`;
-      div.appendChild(qText);
+    function startQuiz() {
+      username = document.getElementById('username').value.trim();
+      if (!username) return alert("Please enter your name!");
+      document.getElementById('startScreen').style.display = 'none';
+      document.getElementById('quizContainer').style.display = 'block';
+      buildQuiz();
+    }
 
-      const opts = document.createElement('div');
-      opts.classList.add('options');
-      q.options.forEach((opt, i) => {
-        const label = document.createElement('label');
-        label.innerHTML = `<input type="radio" name="q${index}" value="${i}"> ${opt}`;
-        label.onclick = () => {
-          if (!locked[index]) {
-            checkAnswer(index, i, label);
-            locked[index] = true;
-            [...opts.children].forEach(child => {
-              child.classList.add('disabled');
-              child.querySelector('input').disabled = true;
-            });
-          }
-        };
-        opts.appendChild(label);
+    function buildQuiz() {
+      const quizForm = document.getElementById('quizForm');
+      quizData.forEach((q, index) => {
+        const div = document.createElement('div');
+        div.classList.add('question');
+        const qText = document.createElement('p');
+        qText.innerHTML = `<strong>${q.question}</strong>`;
+        div.appendChild(qText);
+
+        const opts = document.createElement('div');
+        opts.classList.add('options');
+        q.options.forEach((opt, i) => {
+          const label = document.createElement('label');
+          label.innerHTML = `<input type="radio" name="q${index}" value="${i}"> ${opt}`;
+          label.onclick = () => {
+            if (!locked[index]) {
+              checkAnswer(index, i, label);
+              locked[index] = true;
+              [...opts.children].forEach(child => {
+                child.classList.add('disabled');
+                child.querySelector('input').disabled = true;
+              });
+            }
+          };
+          opts.appendChild(label);
+        });
+
+        div.appendChild(opts);
+        quizForm.appendChild(div);
       });
-
-      div.appendChild(opts);
-      quizForm.appendChild(div);
-    });
+    }
 
     function checkAnswer(qIndex, selected, labelElement) {
       const correct = quizData[qIndex].answer;
@@ -145,6 +174,25 @@
         if (ans === quizData[i].answer) score++;
       });
       document.getElementById("scoreDisplay").textContent = `You scored ${score} out of ${quizData.length}`;
+      saveToLeaderboard(username, score);
+      showLeaderboard();
+    }
+
+    function saveToLeaderboard(name, score) {
+      const data = JSON.parse(localStorage.getItem('aaci_leaderboard') || '[]');
+      data.push({ name, score });
+      localStorage.setItem('aaci_leaderboard', JSON.stringify(data));
+    }
+
+    function showLeaderboard() {
+      const board = JSON.parse(localStorage.getItem('aaci_leaderboard') || '[]');
+      let html = '<h2>Leaderboard</h2><ul>';
+      board.sort((a,b) => b.score - a.score);
+      board.forEach(entry => {
+        html += `<li>${entry.name}: ${entry.score}</li>`;
+      });
+      html += '</ul>';
+      document.getElementById('leaderboard').innerHTML = html;
     }
   </script>
 </body>
