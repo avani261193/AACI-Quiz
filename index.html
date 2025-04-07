@@ -88,112 +88,119 @@
     <div id="leaderboard"></div>
   </div>
 
-  <script>
-    const quizData = [
-      { question: "1. What is the primary objective of clinical governance?", options: ["Increasing hospital profits", "Ensuring patient safety and quality", "Reducing staff workload", "Expanding hospital facilities"], answer: 1 },
-      { question: "2. Which of the following is a pillar of clinical governance?", options: ["Marketing strategy", "Risk management", "Bed capacity", "Staff salary review"], answer: 1 },
-      { question: "3. Clinical audit is used to:", options: ["Manage hospital finances", "Evaluate patient feedback", "Improve clinical practice", "Conduct staff meetings"], answer: 2 },
-      { question: "4. Which is an example of clinical risk?", options: ["Equipment failure", "High staff turnover", "Budget reduction", "Policy change"], answer: 0 },
-      { question: "5. What does EBP stand for?", options: ["Electronic Bed Processing", "Evidence-Based Practice", "Emergency Backup Plan", "Efficient Budget Planning"], answer: 1 },
-      { question: "6. Which activity is part of quality improvement?", options: ["Staff vacation planning", "Clinical audit", "Marketing campaigns", "Facility expansion"], answer: 1 },
-      { question: "7. Root Cause Analysis is used for:", options: ["Promoting staff", "Finding cause of adverse events", "Buying equipment", "Budgeting"], answer: 1 },
-      { question: "8. Patient feedback is primarily used to:", options: ["Punish staff", "Market the hospital", "Improve patient care", "Increase revenue"], answer: 2 },
-      { question: "9. Clinical governance helps in:", options: ["Reducing legal costs", "Improving patient outcomes", "Building new hospitals", "Staff retirement"], answer: 1 },
-      { question: "10. What ensures healthcare decisions are based on best evidence?", options: ["EBP", "Marketing", "Finance team", "HR reports"], answer: 0 },
-      { question: "11. Key part of risk management in hospitals:", options: ["Hiring celebrities", "Patient safety protocols", "Promoting products", "Adding cafes"], answer: 1 },
-      { question: "12. Clinical effectiveness means:", options: ["Using the cheapest treatment", "Doing what always worked", "Providing best outcomes", "Following old rules"], answer: 2 },
-      { question: "13. Incident reporting systems are used to:", options: ["Blame staff", "Improve processes", "Hide errors", "Train receptionists"], answer: 1 },
-      { question: "14. One method to assess healthcare quality:", options: ["Staff gossip", "Audits", "Financial profit", "Social media"], answer: 1 },
-      { question: "15. Clinical governance promotes:", options: ["Fear among staff", "Transparency and improvement", "Strict discipline", "Short-term goals"], answer: 1 }
-    ];
+ <script>
+  const quizData = [
+    { question: "1. What is the primary objective of clinical governance?", options: ["Increasing hospital profits", "Ensuring patient safety and quality", "Reducing staff workload", "Expanding hospital facilities"], answer: 1 },
+    { question: "2. Which of the following is a pillar of clinical governance?", options: ["Marketing strategy", "Risk management", "Bed capacity", "Staff salary review"], answer: 1 },
+    { question: "3. Clinical audit is used to:", options: ["Manage hospital finances", "Evaluate patient feedback", "Improve clinical practice", "Conduct staff meetings"], answer: 2 },
+    { question: "4. Which is an example of clinical risk?", options: ["Equipment failure", "High staff turnover", "Budget reduction", "Policy change"], answer: 0 },
+    { question: "5. What does EBP stand for?", options: ["Electronic Bed Processing", "Evidence-Based Practice", "Emergency Backup Plan", "Efficient Budget Planning"], answer: 1 },
+    { question: "6. Which activity is part of quality improvement?", options: ["Staff vacation planning", "Clinical audit", "Marketing campaigns", "Facility expansion"], answer: 1 },
+    { question: "7. Root Cause Analysis is used for:", options: ["Promoting staff", "Finding cause of adverse events", "Buying equipment", "Budgeting"], answer: 1 },
+    { question: "8. Patient feedback is primarily used to:", options: ["Punish staff", "Market the hospital", "Improve patient care", "Increase revenue"], answer: 2 },
+    { question: "9. Clinical governance helps in:", options: ["Reducing legal costs", "Improving patient outcomes", "Building new hospitals", "Staff retirement"], answer: 1 },
+    { question: "10. What ensures healthcare decisions are based on best evidence?", options: ["EBP", "Marketing", "Finance team", "HR reports"], answer: 0 },
+    { question: "11. Key part of risk management in hospitals:", options: ["Hiring celebrities", "Patient safety protocols", "Promoting products", "Adding cafes"], answer: 1 },
+    { question: "12. Clinical effectiveness means:", options: ["Using the cheapest treatment", "Doing what always worked", "Providing best outcomes", "Following old rules"], answer: 2 },
+    { question: "13. Incident reporting systems are used to:", options: ["Blame staff", "Improve processes", "Hide errors", "Train receptionists"], answer: 1 },
+    { question: "14. One method to assess healthcare quality:", options: ["Staff gossip", "Audits", "Financial profit", "Social media"], answer: 1 },
+    { question: "15. Clinical governance promotes:", options: ["Fear among staff", "Transparency and improvement", "Strict discipline", "Short-term goals"], answer: 1 }
+  ];
 
-    let username = "";
-    let answers = Array(quizData.length).fill(null);
-    let locked = Array(quizData.length).fill(false);
+  let username = "";
+  let answers = Array(quizData.length).fill(null);
+  let locked = Array(quizData.length).fill(false);
 
-    function startQuiz() {
-      username = document.getElementById('username').value.trim();
-      if (!username) return alert("Please enter your name!");
-      document.getElementById('startScreen').style.display = 'none';
-      document.getElementById('quizContainer').style.display = 'block';
-      buildQuiz();
-    }
+  function startQuiz() {
+    username = document.getElementById('username').value.trim();
+    if (!username) return alert("Please enter your name!");
+    document.getElementById('startScreen').style.display = 'none';
+    document.getElementById('quizContainer').style.display = 'block';
+    buildQuiz();
+  }
 
-    function buildQuiz() {
-      const quizForm = document.getElementById('quizForm');
-      quizData.forEach((q, index) => {
-        const div = document.createElement('div');
-        div.classList.add('question');
-        const qText = document.createElement('p');
-        qText.innerHTML = `<strong>${q.question}</strong>`;
-        div.appendChild(qText);
+  function buildQuiz() {
+    const quizForm = document.getElementById('quizForm');
+    quizData.forEach((q, index) => {
+      const div = document.createElement('div');
+      div.classList.add('question');
+      const qText = document.createElement('p');
+      qText.innerHTML = `<strong>${q.question}</strong>`;
+      div.appendChild(qText);
 
-        const opts = document.createElement('div');
-        opts.classList.add('options');
-        q.options.forEach((opt, i) => {
-          const label = document.createElement('label');
-          label.innerHTML = `<input type="radio" name="q${index}" value="${i}"> ${opt}`;
-          label.onclick = () => {
-            if (!locked[index]) {
-              checkAnswer(index, i, label);
-              locked[index] = true;
-              [...opts.children].forEach(child => {
-                child.classList.add('disabled');
-                child.querySelector('input').disabled = true;
-              });
-            }
-          };
-          opts.appendChild(label);
-        });
-
-        div.appendChild(opts);
-        quizForm.appendChild(div);
-      });
-    }
-
-    function checkAnswer(qIndex, selected, labelElement) {
-      const correct = quizData[qIndex].answer;
-      if (selected === correct) {
-        labelElement.classList.add('correct');
-      } else {
-        labelElement.classList.add('wrong');
-        const parent = labelElement.parentElement;
-        [...parent.children].forEach(label => {
-          const input = label.querySelector('input');
-          if (parseInt(input.value) === correct) {
-            label.classList.add('correct');
+      const opts = document.createElement('div');
+      opts.classList.add('options');
+      q.options.forEach((opt, i) => {
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="radio" name="q${index}" value="${i}"> ${opt}`;
+        label.onclick = () => {
+          if (!locked[index]) {
+            checkAnswer(index, i, label);
+            locked[index] = true;
+            [...opts.children].forEach(child => {
+              child.classList.add('disabled');
+              child.querySelector('input').disabled = true;
+            });
           }
-        });
-      }
-      answers[qIndex] = selected;
-    }
-
-    function submitQuiz() {
-      let score = 0;
-      answers.forEach((ans, i) => {
-        if (ans === quizData[i].answer) score++;
+        };
+        opts.appendChild(label);
       });
-      document.getElementById("scoreDisplay").textContent = `You scored ${score} out of ${quizData.length}`;
-      saveToLeaderboard(username, score);
-      showLeaderboard();
-    }
 
-    function saveToLeaderboard(name, score) {
-      const data = JSON.parse(localStorage.getItem('aaci_leaderboard') || '[]');
-      data.push({ name, score });
-      localStorage.setItem('aaci_leaderboard', JSON.stringify(data));
-    }
+      div.appendChild(opts);
+      quizForm.appendChild(div);
+    });
+  }
 
-    function showLeaderboard() {
-      const board = JSON.parse(localStorage.getItem('aaci_leaderboard') || '[]');
-      let html = '<h2>Leaderboard</h2><ul>';
-      board.sort((a,b) => b.score - a.score);
-      board.forEach(entry => {
-        html += `<li>${entry.name}: ${entry.score}</li>`;
+  function checkAnswer(qIndex, selected, labelElement) {
+    const correct = quizData[qIndex].answer;
+    if (selected === correct) {
+      labelElement.classList.add('correct');
+    } else {
+      labelElement.classList.add('wrong');
+      const parent = labelElement.parentElement;
+      [...parent.children].forEach(label => {
+        const input = label.querySelector('input');
+        if (parseInt(input.value) === correct) {
+          label.classList.add('correct');
+        }
       });
-      html += '</ul>';
-      document.getElementById('leaderboard').innerHTML = html;
     }
-  </script>
+    answers[qIndex] = selected;
+  }
+
+  function submitQuiz() {
+    let score = 0;
+    answers.forEach((ans, i) => {
+      if (ans === quizData[i].answer) score++;
+    });
+    document.getElementById("scoreDisplay").textContent = `You scored ${score} out of ${quizData.length}`;
+    saveToLeaderboard(username, score);
+    showLeaderboard();
+  }
+
+  function saveToLeaderboard(name, score) {
+    const data = JSON.parse(localStorage.getItem('aaci_leaderboard') || '[]');
+
+    // Remove old entry with same name (if needed)
+    const filtered = data.filter(entry => entry.name !== name);
+
+    filtered.push({ name, score });
+    filtered.sort((a, b) => b.score - a.score);
+
+    // Limit to top 10
+    const top10 = filtered.slice(0, 10);
+    localStorage.setItem('aaci_leaderboard', JSON.stringify(top10));
+  }
+
+  function showLeaderboard() {
+    const board = JSON.parse(localStorage.getItem('aaci_leaderboard') || '[]');
+    let html = '<h2>🏆 Leaderboard</h2><ol style="padding-left: 20px;">';
+    board.forEach(entry => {
+      html += `<li><strong>${entry.name}</strong>: ${entry.score}</li>`;
+    });
+    html += '</ol>';
+    document.getElementById('leaderboard').innerHTML = html;
+  }
+</script>
 </body>
 </html>
