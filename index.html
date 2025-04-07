@@ -179,28 +179,34 @@
   }
 
   function saveToLeaderboard(name, score) {
-    const data = JSON.parse(localStorage.getItem('aaci_leaderboard') || '[]');
+  fetch('https://script.google.com/macros/s/AKfycbx2Byi0H2miCEa2qYSjfgG2ZtFzHZcQeLJOntbyGl8Ds_Ny9e4m9lEKL4P4sCd-yPJXgg/exec', {
+    method: 'POST',
+    mode: 'no-cors', // Required for Google Apps Script without CORS headers
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ name, score })
+  }).then(() => {
+    showLeaderboard(); // Fetch after saving
+  });
+}
 
-    // Remove old entry with same name (if needed)
-    const filtered = data.filter(entry => entry.name !== name);
-
-    filtered.push({ name, score });
-    filtered.sort((a, b) => b.score - a.score);
-
-    // Limit to top 10
-    const top10 = filtered.slice(0, 10);
-    localStorage.setItem('aaci_leaderboard', JSON.stringify(top10));
-  }
-
-  function showLeaderboard() {
-    const board = JSON.parse(localStorage.getItem('aaci_leaderboard') || '[]');
-    let html = '<h2>🏆 Leaderboard</h2><ol style="padding-left: 20px;">';
-    board.forEach(entry => {
-      html += `<li><strong>${entry.name}</strong>: ${entry.score}</li>`;
+function showLeaderboard() {
+  fetch('https://script.google.com/macros/s/AKfycbx2Byi0H2miCEa2qYSjfgG2ZtFzHZcQeLJOntbyGl8Ds_Ny9e4m9lEKL4P4sCd-yPJXgg/exec')
+    .then(res => res.json())
+    .then(data => {
+      let html = '<h2>Leaderboard</h2><ul>';
+      data.forEach(entry => {
+        html += `<li>${entry.name}: ${entry.score}</li>`;
+      });
+      html += '</ul>';
+      document.getElementById('leaderboard').innerHTML = html;
+    })
+    .catch(err => {
+      console.error("Failed to load leaderboard:", err);
+      document.getElementById('leaderboard').innerHTML = '<p style="color:red;">Unable to load leaderboard.</p>';
     });
-    html += '</ol>';
-    document.getElementById('leaderboard').innerHTML = html;
-  }
+}
 </script>
 </body>
 </html>
