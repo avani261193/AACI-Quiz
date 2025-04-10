@@ -211,7 +211,7 @@ function submitQuiz() {
 }
 
 function saveToLeaderboard(name, organization, code, score, timeTaken) {
-  fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+  fetch('https://script.google.com/macros/s/AKfycbwFu1Y1lzlH1KAr8B2jYPBqB9wFV7ukRrhQYOgXWZgfWTgcn1SLeZHOki8a3h4QxAiDrQ/exec', {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'application/json' },
@@ -220,7 +220,7 @@ function saveToLeaderboard(name, organization, code, score, timeTaken) {
 }
 
 function showLeaderboard() {
-  fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec')
+  fetch('https://script.google.com/macros/s/AKfycbwFu1Y1lzlH1KAr8B2jYPBqB9wFV7ukRrhQYOgXWZgfWTgcn1SLeZHOki8a3h4QxAiDrQ/exec')
     .then(res => res.json())
     .then(data => {
       data.sort((a, b) => b.score - a.score || a.timeTaken - b.timeTaken);
