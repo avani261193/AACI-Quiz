@@ -94,7 +94,7 @@ let answers = [];
 let timer;
 let timeLeft = 900; // 15 minutes
 
-const quizData = [ /*{ question: "Which standard focuses on ensuring that the governance body maintains independence from hospital operations?", options: ["GLD 1", "GLD 4", "GLD 2", "GLD 5"], answer: 1 },
+const quizData = [{ question: "Which standard focuses on ensuring that the governance body maintains independence from hospital operations?", options: ["GLD 1", "GLD 4", "GLD 2", "GLD 5"], answer: 1 },
   { question: "What does standard PFR 3 emphasize in relation to patient rights?", options: ["Patients must sign consent forms before any treatment", "Patients have the right to access their own medical records", "Patient rights must be explained only if requested", "Patients must be discharged within 24 hours"], answer: 1 },
   { question: "According to standard HIC 5, how should health records be handled?", options: ["Stored digitally only", "Destroyed after discharge", "Maintained in a legible, secure, and confidential manner", "Shared with all family members on request"], answer: 2 },
   { question: "Which standard mandates a continuous quality improvement (CQI) program within the hospital?", options: ["GLD 1", "QPS 1", "HIC 2", "PFR 4"], answer: 1 },
@@ -109,7 +109,7 @@ const quizData = [ /*{ question: "Which standard focuses on ensuring that the go
   { question: "Standard GLD 6 states that which document must be publicly available?", options: ["Board members' phone numbers", "List of hospital owners", "Hospital’s mission, vision, and values", "Annual financial statements"], answer: 2 },
   { question: "Standard MCI 4 ensures that communication during care is:", options: ["Limited to written documents only", "Between nurses and patients only", "Effective, timely, and documented", "Optional depending on the situation"], answer: 2 },
   { question: "According to COP 9, what must be followed during the discharge process?", options: ["Patient must leave in 1 hour", "Final billing is optional", "A documented discharge summary is provided", "Discharge is verbal only"], answer: 2 }
-];  */ ];
+];
 
 function shuffleArray(array) {
   return array.map(value => ({ value, sort: Math.random() }))
