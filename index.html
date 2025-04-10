@@ -88,125 +88,24 @@
     <div id="leaderboard"></div>
   </div>
 
- <script>
-  const quizData = [
-    { question: "1. What is the primary objective of clinical governance?", options: ["Increasing hospital profits", "Ensuring patient safety and quality", "Reducing staff workload", "Expanding hospital facilities"], answer: 1 },
-    { question: "2. Which of the following is a pillar of clinical governance?", options: ["Marketing strategy", "Risk management", "Bed capacity", "Staff salary review"], answer: 1 },
-    { question: "3. Clinical audit is used to:", options: ["Manage hospital finances", "Evaluate patient feedback", "Improve clinical practice", "Conduct staff meetings"], answer: 2 },
-    { question: "4. Which is an example of clinical risk?", options: ["Equipment failure", "High staff turnover", "Budget reduction", "Policy change"], answer: 0 },
-    { question: "5. What does EBP stand for?", options: ["Electronic Bed Processing", "Evidence-Based Practice", "Emergency Backup Plan", "Efficient Budget Planning"], answer: 1 },
-    { question: "6. Which activity is part of quality improvement?", options: ["Staff vacation planning", "Clinical audit", "Marketing campaigns", "Facility expansion"], answer: 1 },
-    { question: "7. Root Cause Analysis is used for:", options: ["Promoting staff", "Finding cause of adverse events", "Buying equipment", "Budgeting"], answer: 1 },
-    { question: "8. Patient feedback is primarily used to:", options: ["Punish staff", "Market the hospital", "Improve patient care", "Increase revenue"], answer: 2 },
-    { question: "9. Clinical governance helps in:", options: ["Reducing legal costs", "Improving patient outcomes", "Building new hospitals", "Staff retirement"], answer: 1 },
-    { question: "10. What ensures healthcare decisions are based on best evidence?", options: ["EBP", "Marketing", "Finance team", "HR reports"], answer: 0 },
-    { question: "11. Key part of risk management in hospitals:", options: ["Hiring celebrities", "Patient safety protocols", "Promoting products", "Adding cafes"], answer: 1 },
-    { question: "12. Clinical effectiveness means:", options: ["Using the cheapest treatment", "Doing what always worked", "Providing best outcomes", "Following old rules"], answer: 2 },
-    { question: "13. Incident reporting systems are used to:", options: ["Blame staff", "Improve processes", "Hide errors", "Train receptionists"], answer: 1 },
-    { question: "14. One method to assess healthcare quality:", options: ["Staff gossip", "Audits", "Financial profit", "Social media"], answer: 1 },
-    { question: "15. Clinical governance promotes:", options: ["Fear among staff", "Transparency and improvement", "Strict discipline", "Short-term goals"], answer: 1 }
-  ];
-
-  let username = "";
-  let answers = Array(quizData.length).fill(null);
-  let locked = Array(quizData.length).fill(false);
-
-  function startQuiz() {
-    username = document.getElementById('username').value.trim();
-    if (!username) return alert("Please enter your name!");
-    document.getElementById('startScreen').style.display = 'none';
-    document.getElementById('quizContainer').style.display = 'block';
-    buildQuiz();
-  }
-
-  function buildQuiz() {
-    const quizForm = document.getElementById('quizForm');
-    quizData.forEach((q, index) => {
-      const div = document.createElement('div');
-      div.classList.add('question');
-      const qText = document.createElement('p');
-      qText.innerHTML = `<strong>${q.question}</strong>`;
-      div.appendChild(qText);
-
-      const opts = document.createElement('div');
-      opts.classList.add('options');
-      q.options.forEach((opt, i) => {
-        const label = document.createElement('label');
-        label.innerHTML = `<input type="radio" name="q${index}" value="${i}"> ${opt}`;
-        label.onclick = () => {
-          if (!locked[index]) {
-            checkAnswer(index, i, label);
-            locked[index] = true;
-            [...opts.children].forEach(child => {
-              child.classList.add('disabled');
-              child.querySelector('input').disabled = true;
-            });
-          }
-        };
-        opts.appendChild(label);
-      });
-
-      div.appendChild(opts);
-      quizForm.appendChild(div);
-    });
-  }
-
-  function checkAnswer(qIndex, selected, labelElement) {
-    const correct = quizData[qIndex].answer;
-    if (selected === correct) {
-      labelElement.classList.add('correct');
-    } else {
-      labelElement.classList.add('wrong');
-      const parent = labelElement.parentElement;
-      [...parent.children].forEach(label => {
-        const input = label.querySelector('input');
-        if (parseInt(input.value) === correct) {
-          label.classList.add('correct');
-        }
-      });
-    }
-    answers[qIndex] = selected;
-  }
-
-  function submitQuiz() {
-    let score = 0;
-    answers.forEach((ans, i) => {
-      if (ans === quizData[i].answer) score++;
-    });
-    document.getElementById("scoreDisplay").textContent = `You scored ${score} out of ${quizData.length}`;
-    saveToLeaderboard(username, score);
-    showLeaderboard();
-  }
-
-  function saveToLeaderboard(name, score) {
-  fetch('https://script.google.com/macros/s/AKfycbx2Byi0H2miCEa2qYSjfgG2ZtFzHZcQeLJOntbyGl8Ds_Ny9e4m9lEKL4P4sCd-yPJXgg/exec', {
-    method: 'POST',
-    mode: 'no-cors', // Required for Google Apps Script without CORS headers
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({ name, score })
-  }).then(() => {
-    showLeaderboard(); // Fetch after saving
-  });
-}
-
-function showLeaderboard() {
-  fetch('https://script.google.com/macros/s/AKfycbx2Byi0H2miCEa2qYSjfgG2ZtFzHZcQeLJOntbyGl8Ds_Ny9e4m9lEKL4P4sCd-yPJXgg/exec')
-    .then(res => res.json())
-    .then(data => {
-      let html = '<h2>Leaderboard</h2><ul>';
-      data.forEach(entry => {
-        html += `<li>${entry.name}: ${entry.score}</li>`;
-      });
-      html += '</ul>';
-      document.getElementById('leaderboard').innerHTML = html;
-    })
-    .catch(err => {
-      console.error("Failed to load leaderboard:", err);
-      document.getElementById('leaderboard').innerHTML = '<p style="color:red;">Unable to load leaderboard.</p>';
-    });
-}
+<script>
+const quizData = [
+  { question: "1. Which standard focuses on ensuring that the governance body maintains independence from hospital operations?", options: ["GLD 1", "GLD 4", "GLD 2", "GLD 5"], answer: 1 },
+  { question: "2. What does standard PFR 3 emphasize in relation to patient rights?", options: ["Patients must sign consent forms before any treatment", "Patients have the right to access their own medical records", "Patient rights must be explained only if requested", "Patients must be discharged within 24 hours"], answer: 1 },
+  { question: "3. According to standard HIC 5, how should health records be handled?", options: ["Stored digitally only", "Destroyed after discharge", "Maintained in a legible, secure, and confidential manner", "Shared with all family members on request"], answer: 2 },
+  { question: "4. Which standard mandates a continuous quality improvement (CQI) program within the hospital?", options: ["GLD 1", "QPS 1", "HIC 2", "PFR 4"], answer: 1 },
+  { question: "5. What does standard MCI 1 require from hospitals regarding patient care information?", options: ["Information should be provided on social media platforms", "Provide written and verbal information about care in a language the patient understands", "Only doctors are allowed to share patient details", "Patients must find out information themselves"], answer: 1 },
+  { question: "6. According to COP 2, what is essential before administering any treatment?", options: ["A nurse’s verbal approval", "An informed consent from the patient", "Doctor’s permission only", "Medical insurance confirmation"], answer: 1 },
+  { question: "7. Standard HIC 7 ensures that health records are retained for how long?", options: ["Until the patient is discharged", "Indefinitely", "As per legal and institutional requirements", "Only during treatment"], answer: 2 },
+  { question: "8. According to PRE 4, what must be ensured before admission?", options: ["Payment is received", "Availability of room", "Appropriate triaging and emergency management", "Food preferences are recorded"], answer: 2 },
+  { question: "9. What is the focus of standard FMS 1 in hospital safety?", options: ["Only fire safety", "Only medical device calibration", "Facility management and safety systems", "Managing finances"], answer: 2 },
+  { question: "10. Which standard involves handling biomedical waste according to laws?", options: ["HIC 8", "FMS 7", "IMS 3", "FMS 8"], answer: 3 },
+  { question: "11. According to HIC 3, what should hospitals do for infection control?", options: ["Use antibiotics for all admitted patients", "Maintain hand hygiene and standard precautions", "Disinfect only in ICUs", "Ask patients to bring their own masks"], answer: 1 },
+  { question: "12. Which standard focuses on ensuring the availability and proper storage of medications?", options: ["COP 1", "MOM 1", "HIC 6", "QPS 2"], answer: 1 },
+  { question: "13. Standard GLD 6 states that which document must be publicly available?", options: ["Board members' phone numbers", "List of hospital owners", "Hospital’s mission, vision, and values", "Annual financial statements"], answer: 2 },
+  { question: "14. Standard MCI 4 ensures that communication during care is:", options: ["Limited to written documents only", "Between nurses and patients only", "Effective, timely, and documented", "Optional depending on the situation"], answer: 2 },
+  { question: "15. According to COP 9, what must be followed during the discharge process?", options: ["Patient must leave in 1 hour", "Final billing is optional", "A documented discharge summary is provided", "Discharge is verbal only"], answer: 2 }
+];
 </script>
 </body>
 </html>
