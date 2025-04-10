@@ -86,6 +86,10 @@
     <form id="quizForm"></form>
     <div class="score" id="scoreDisplay"></div>
     <div id="leaderboard"></div>
+   <button id="adminSendBtn" onclick="sendWhatsAppSummary()" style="display:none; margin-top: 20px;">
+  📤 Send WhatsApp Summary
+</button>
+ 
   </div>
 <script>
 let username = "", orgname = "", accesscode = "";
@@ -134,6 +138,9 @@ function startQuiz() {
 
   document.getElementById('startScreen').style.display = 'none';
   document.getElementById('quizContainer').style.display = 'block';
+  if (accesscode === "AACIADMIN123") {
+  document.getElementById("adminSendBtn").style.display = "inline-block";
+}
   startTimer();
   buildQuiz();
 }
@@ -240,6 +247,26 @@ function showLeaderboard() {
       document.getElementById('leaderboard').innerHTML = '<p style="color:red;">Leaderboard unavailable.</p>';
     });
 }
+function sendWhatsAppSummary() {
+  fetch('https://script.google.com/macros/s/AKfycbwFu1Y1lzlH1KAr8B2jYPBqB9wFV7ukRrhQYOgXWZgfWTgcn1SLeZHOki8a3h4QxAiDrQ/exec')
+    .then(res => res.json())
+    .then(data => {
+      data.sort((a, b) => b.score - a.score || a.timeTaken - b.timeTaken);
+
+      let message = "🏆 *AACI Quiz Leaderboard*\n";
+      data.forEach((entry, index) => {
+        message += `${index + 1}. ${entry.name} (${entry.organization}) - ${entry.score} pts in ${entry.timeTaken}s\n`;
+      });
+
+      const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      window.open(whatsappURL, '_blank');
+    })
+    .catch(err => {
+      console.error("Failed to generate WhatsApp summary:", err);
+      alert("Unable to fetch leaderboard. Please try again.");
+    });
+}
+  
 </script>
 </body>
 </html>
