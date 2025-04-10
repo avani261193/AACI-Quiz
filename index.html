@@ -182,14 +182,19 @@ function showNextQuestion() {
   q.options.forEach((opt, i) => {
     const label = document.createElement('label');
     label.innerHTML = `<input type="radio" name="q${currentQuestion}" value="${i}"> ${opt}`;
-    label.onclick = () => {
-      answers[currentQuestion] = i;
-      label.classList.add(i === q.answer ? 'correct' : 'wrong');
-      setTimeout(() => {
-        currentQuestion++;
-        showNextQuestion();
-      }, 500);
-    };
+    label.addEventListener("click", (e) => {
+  e.preventDefault(); // Prevent double firing
+  if (answers[currentQuestion] !== null) return; // Prevent re-answering
+
+  answers[currentQuestion] = i;
+  label.classList.add(i === q.answer ? 'correct' : 'wrong');
+
+  setTimeout(() => {
+    currentQuestion++;
+    showNextQuestion();
+  }, 500);
+});
+
     opts.appendChild(label);
   });
 
